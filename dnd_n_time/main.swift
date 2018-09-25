@@ -96,19 +96,15 @@ func minutesSinceMidnight() -> Int
 
 let argc = CommandLine.argc
 
+let start = minutesSinceMidnight()
+var stop = minutesSinceMidnight()
+
 if argc < 2 {
-    //DND next 30 minutes
-    let start = minutesSinceMidnight()
-    let stop = minutesSinceMidnight() + 30
+    // DND next 30 minutes
 
-    enableDND(start: Float(start), stop: Float(stop))
-    exit(EXIT_SUCCESS)
-}
-
-if let arg:Int = Int(CommandLine.arguments[1]) {
+    stop = stop + 30
+} else if let arg:Int = Int(CommandLine.arguments[1]) {
     // DND next input minutes
-    let start = minutesSinceMidnight()
-    var stop = minutesSinceMidnight()
 
     if arg >= 0 && arg <= 1440 {
         stop = stop + arg
@@ -116,11 +112,9 @@ if let arg:Int = Int(CommandLine.arguments[1]) {
         print("Invalid argument given")
         exit(EXIT_FAILURE)
     }
-
-    enableDND(start: Float(start), stop: Float(stop))
-    exit(EXIT_SUCCESS)
+} else {
+    // Disable DND, no action needed
 }
 
-// Should not get to here
-print("How did control get to here? It's a mystery")
-exit(EXIT_FAILURE)
+enableDND(start: Float(start), stop: Float(stop))
+exit(EXIT_SUCCESS)
